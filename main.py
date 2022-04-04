@@ -1,58 +1,40 @@
-import re
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from truth_table import TruthTable, VariablesAreNotProvided
+from fastapi.responses import JSONResponse
+
+import uvicorn
 
 
-class TruthTable:
-    def __init__(self) -> None:
-        self.table = []
-        self.headers = []
-
-    @staticmethod
-    def get_rotated_matrix(matrix:list) -> list:
-        """Rotate matrix to 90 degrees clckwise"""
-        return list(list(x)[::-1] for x in zip(*matrix))
-
-    @staticmethod
-    def get_bin(number: int, length: int) -> str:
-        """Returns bin number in format value:length.f"""
-        number = bin(number)[2:]
-        length_delta = len(number) - length
-        if length_delta < 0:
-            for _ in range(-length_delta):
-                number = "0" + number
-        elif length_delta > 0: 
-            number = number[:-length_delta]
-        return number
-
-    def __repr__(self) -> str:
-        str_table = " ".join(header for header in self.headers) + "\n"
-        power = len(self.headers)
-        for i in range(2**power):
-            for j in range(power):
-                str_table += self.table[j][i] + " "
-            str_table += "\n"
-
-        return str_table
-
-    def solve_instance(self, instance: str):
-        impl = re.findall(r"IMP\((.*?)\)", instance)
-
-    def add_column(self, variable: str, values: list):
-        self.headers.append(variable)
-        self.table.append(values)
-
-    def set_start_columns(self, variables:list) -> None:
-        for variable in variables:
-            self.headers.append(variable)
-            self.table.append([])
-        power = len(variables)
-        for i in range(2**power):
-            number = self.get_bin(i, power)
-            for j in range(len(number)):
-                self.table[j].append(number[j])
+app = FastAPI()
 
 
-table = TruthTable()
-table.set_start_columns(["A", "B", "C", "D"])
-print(table)
-instance = input(">>> ")
-table.solve_instance(instance)
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.post("/solve_instance", status_code=200)
+async def solve_instance(instance: str):
+    """
+    Это метод решает логические функции. Возращает таблицу истинности
+    """
+    truth_table = TruthTable()
+    try:
+        truth_table.set_start_columns(instance)
+    except VariablesAreNotProvided as e:
+        return HTTPException(status_code=400, detail=e.msg)
+    truth_table.solve_instance(instance)
+    return JSONResponse({
+        "truth_table": truth_table.get_dict(),
+        "status_code": 200
+    })
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
