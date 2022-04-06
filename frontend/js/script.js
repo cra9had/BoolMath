@@ -2,8 +2,16 @@ let button = document.getElementById("SolveButton")
 let input = document.getElementById("InstanceInput")
 
 
+function SetSolution(solution){
+    let div = document.getElementsByClassName("solution")[0]
+    div.innerHTML = "<span>Решение:</span><br>"
+    for (let i = 0; i < solution.length; i++){
+        div.innerHTML += `<li class="list-group-item">${i+1}. ${solution[i]}</li>`
+    }
+}
+
+
 function SetTable (table){
-    // table = sortDict(table)
     let keys = Object.keys(table)
 
     keys.sort(function (a, b){
@@ -33,7 +41,6 @@ function SetTable (table){
     for (let i = 0; i < table[keys[0]].length; i++) {
         for (let j=0; j<keys.length; j++) {
             let value = table[keys[j]]
-            console.log(value)
             row += `<td>${value[i]}</td>`
         }
         body.insertAdjacentHTML('beforeend', `<tr>${row}</tr>`)
@@ -54,6 +61,7 @@ button.onclick = async function onclick () {
     if (response["status_code"] === 200){
 
         SetTable(response["truth_table"])
+        SetSolution(response["solution"])
     }
     else{
         alert(response["detail"])

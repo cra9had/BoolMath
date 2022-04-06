@@ -20,6 +20,7 @@ class TruthTable:
     def __init__(self) -> None:
         self.table = []
         self.headers = []
+        self.solution = []
         self.current_action = 0     # Текущее действие
 
     @staticmethod
@@ -49,8 +50,17 @@ class TruthTable:
             except ValueError:
                 h = header
             output_dict.update({h: list(map(int, self.table[i]))})
-        print(output_dict)
+
         return output_dict
+
+    def get_solution(self):
+        solutions = []
+        for j, solution in enumerate(self.solution):
+            for i, sol in enumerate(self.solution):
+                solution = solution.replace(str(i + 1), sol)
+            self.solution[j] = solution
+            solutions.append(solution)
+        return solutions
 
     def __repr__(self) -> str:
         str_table = " ".join(header for header in self.headers) + "\n"
@@ -116,26 +126,31 @@ class TruthTable:
         inversion = re.search(r"INV\(.[^INV()]?\)", instance)
         conjunction = re.search(r".?/\\.?", instance)
         disjunction = re.search(r".?\\/.?", instance)
-        implication = re.search(r".?->.?", instance)
+        implication = re.search(r".?->[^INV]", instance)
         equation = re.search(r".?=.?", instance)
 
         if inversion:
+            self.solution.append(instance[inversion.start():inversion.end()])
             self.make_inversion(inversion.group()[4:-1])
             instance = self.cut_instance(instance, inversion.span())
 
         elif conjunction:
+            self.solution.append(instance[conjunction.start():conjunction.end()])
             self.make_conjunction(conjunction.group().split("/\\"))
             instance = self.cut_instance(instance, conjunction.span())
 
         elif disjunction:
+            self.solution.append(instance[disjunction.start():disjunction.end()])
             self.make_disjunction(disjunction.group().split("\\/"))
             instance = self.cut_instance(instance, disjunction.span())
 
         elif implication:
+            self.solution.append(instance[implication.start():implication.end()])
             self.make_implication(implication.group().split("->"))
             instance = self.cut_instance(instance, implication.span())
 
         elif equation:
+            self.solution.append(instance[equation.start():equation.end()])
             self.make_equation(equation.group().split("="))
             instance = self.cut_instance(instance, equation.span())
 

@@ -48,6 +48,7 @@ async def solve_instance(instance: str):
         return HTTPException(status_code=400, detail=str(e))
     return JSONResponse({
         "truth_table": truth_table.get_dict(),
+        "solution": truth_table.get_solution(),
         "status_code": 200
     })
 

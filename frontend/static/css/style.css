@@ -2,6 +2,11 @@
 	width: 2rem;
 }
 
+.solution {
+	padding-top: 0.5rem;
+	padding-bottom: 1rem;
+}
+
 /* Style all font awesome icons */
 .fa {
   padding: 20px;
@@ -33,7 +38,6 @@ header, nav, section, article, aside, footer {
 }
 body {
 	height: 100%;
-	background-color: aquamarine;
 }
 
 
