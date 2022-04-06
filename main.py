@@ -6,7 +6,20 @@ from fastapi.responses import JSONResponse
 import uvicorn
 
 
-app = FastAPI()
+description = """
+API калькулятора таблицы истинности.
+"""
+
+
+app = FastAPI(
+    title="BestCalculatorEver",
+    description=description,
+    version="0.0.1",
+    contact={
+        "name": "Khaiam Aliev",
+        "email": "khaiam.aliev@mail.ru"
+    }
+)
 
 
 origins = ["*"]
@@ -29,7 +42,10 @@ async def solve_instance(instance: str):
         truth_table.set_start_columns(instance)
     except VariablesAreNotProvided as e:
         return HTTPException(status_code=400, detail=e.msg)
-    truth_table.solve_instance(instance)
+    try:
+        truth_table.solve_instance(instance)
+    except Exception as e:
+        return HTTPException(status_code=400, detail=str(e))
     return JSONResponse({
         "truth_table": truth_table.get_dict(),
         "status_code": 200

@@ -2,23 +2,6 @@ let button = document.getElementById("SolveButton")
 let input = document.getElementById("InstanceInput")
 
 
-function sorter(arr) {
-  function type_index(val) {
-    const types = ["integer", "string"];
-    let type;
-    if (typeof val == "string") {
-      type = "string";
-    } else if (typeof val == "number" && Number.isInteger(val)) {
-      type = "integer";
-    }
-    return types.indexOf(type);
-  }
-
-  return arr.sort((a, b) => type_index(a) - type_index(b));
-}
-
-
-
 function SetTable (table){
     // table = sortDict(table)
     let keys = Object.keys(table)
