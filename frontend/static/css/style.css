@@ -27,7 +27,7 @@
 }
 
 .fa-instagram {
-
+	color: deeppink;
 }
 
 html {
@@ -44,10 +44,34 @@ body {
 }
 
 
+.main-content {
+	border: 2px solid deepskyblue;
+	border-radius: 10px;
+}
+
+
 #content {
 	flex: 1 0 auto;
-	margin-bottom: 4rem;
+	margin-bottom: 10rem;
+	margin-top: 5rem;
 }
 #footer {
 	flex: 0 0 auto;
+}
+
+#keyboard {
+	max-width: 300px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-column-gap: 5px;
+	grid-row-gap: 5px;
+
+}
+
+.keyboard-button {
+	border-radius: 7px;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: searchfield-cancel-button;
 }

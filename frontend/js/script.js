@@ -49,6 +49,28 @@ function SetTable (table){
 }
 
 
+window.addEventListener('load', function () {
+    let keyboard = document.getElementById('keyboard')
+    let buttons = ['/\\', '\\/', '->', '=', 'INV()', 'A', 'B', 'C', 'D'];
+    console.log(buttons)
+    for (let i = 0; i < buttons.length; i++){
+        const button_text = buttons[i]
+        const button = `<button class="keyboard-button" id="${button_text}">${button_text}</button>`
+        keyboard.insertAdjacentHTML('beforeend', button)
+        document.getElementById(button_text).onclick = function () {
+            const length = input.selectionStart
+
+            input.setRangeText(button_text)
+            input.focus()
+            if (button_text !== "INV()") {
+                input.setSelectionRange( length + button_text.length,  length + button_text.length);
+            } else {
+                input.setSelectionRange( length + button_text.length - 1,  length + button_text.length - 1);
+            }
+        }
+    }
+})
+
 button.onclick = async function onclick () {
     let params = "?instance=" + input.value
     let request = await fetch("http://127.0.0.1:8000/solve_instance" + params, {
@@ -67,3 +89,4 @@ button.onclick = async function onclick () {
         alert(response["detail"])
     }
 }
+
