@@ -1,0 +1,82 @@
+Traceback (most recent call last):
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 224, in run
+    handler()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 257, in handle_term
+    raise StopIteration
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/truth_calculator/venv/bin/gunicorn", line 8, in <module>
+    sys.exit(run())
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/wsgiapp.py", line 67, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/base.py", line 236, in run
+    super().run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/base.py", line 72, in run
+    Arbiter(self).run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 227, in run
+    self.halt()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 342, in halt
+    self.stop()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 385, in stop
+    sock.close_sockets(self.LISTENERS, unlink)
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/sock.py", line 213, in close_sockets
+    os.unlink(sock_name)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/truth_calculator/run/gunicorn.sock'
+Traceback (most recent call last):
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 224, in run
+    handler()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 257, in handle_term
+    raise StopIteration
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/truth_calculator/venv/bin/gunicorn", line 8, in <module>
+    sys.exit(run())
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/wsgiapp.py", line 67, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/base.py", line 236, in run
+    super().run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/base.py", line 72, in run
+    Arbiter(self).run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 227, in run
+    self.halt()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 342, in halt
+    self.stop()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 385, in stop
+    sock.close_sockets(self.LISTENERS, unlink)
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/sock.py", line 213, in close_sockets
+    os.unlink(sock_name)
+FileNotFoundError: [Errno 2] No such file or directory: '/var/run/gunicorn.sock'
+Traceback (most recent call last):
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 224, in run
+    handler()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 257, in handle_term
+    raise StopIteration
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/truth_calculator/venv/bin/gunicorn", line 8, in <module>
+    sys.exit(run())
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/wsgiapp.py", line 67, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/base.py", line 236, in run
+    super().run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/app/base.py", line 72, in run
+    Arbiter(self).run()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 227, in run
+    self.halt()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 342, in halt
+    self.stop()
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/arbiter.py", line 385, in stop
+    sock.close_sockets(self.LISTENERS, unlink)
+  File "/home/truth_calculator/venv/lib/python3.10/site-packages/gunicorn/sock.py", line 213, in close_sockets
+    os.unlink(sock_name)
+FileNotFoundError: [Errno 2] No such file or directory: '/var/run/gunicorn.sock'
+1

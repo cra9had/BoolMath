@@ -73,7 +73,7 @@ window.addEventListener('load', function () {
 
 button.onclick = async function onclick () {
     let params = "?instance=" + input.value
-    let request = await fetch("http://127.0.0.1:8000/solve_instance" + params, {
+    let request = await fetch("http://194.67.91.215/api/solve_instance" + params, {
         method: "POST",
         headers: {
             "Accept": "application/json"

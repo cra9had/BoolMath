@@ -32,7 +32,7 @@ app.add_middleware(
 )
 
 
-@app.post("/solve_instance", status_code=200)
+@app.post("/api/solve_instance", status_code=200)
 async def solve_instance(instance: str):
     """
     Это метод решает логические функции. Возращает таблицу истинности
