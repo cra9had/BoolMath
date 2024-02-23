@@ -46,7 +46,7 @@ class Table(BaseModel):
 
 
 @app.post("/api/solve_instance", status_code=200)
-async def solve_instance(instance: str) -> Union[Table, HTTPException]:
+async def solve_instance(instance: str) -> Table:
     """
     Это метод решает логические функции. Возращает таблицу истинности
     """
@@ -54,11 +54,11 @@ async def solve_instance(instance: str) -> Union[Table, HTTPException]:
     try:
         truth_table.set_start_columns(instance)
     except VariablesAreNotProvided as e:
-        return HTTPException(status_code=400, detail=e.msg)
+        raise  HTTPException(status_code=400, detail=e.msg)
     try:
         truth_table.solve_instance(instance)
     except Exception as e:
-        return HTTPException(status_code=400, detail=str(e))
+        raise  HTTPException(status_code=400, detail=str(e))
     return Table(truth_table=truth_table.get_dict(), solution=truth_table.get_solution(), status_code=200)
 
 
