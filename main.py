@@ -1,8 +1,9 @@
+from typing import Union
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from truth_table import TruthTable, VariablesAreNotProvided
-from fastapi.responses import JSONResponse
-
+from pydantic import BaseModel
 import uvicorn
 
 
@@ -21,7 +22,6 @@ app = FastAPI(
     }
 )
 
-
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -32,8 +32,14 @@ app.add_middleware(
 )
 
 
+class Table(BaseModel):
+    truth_table: dict
+    solution: list
+    status_code: int
+
+
 @app.post("/api/solve_instance", status_code=200)
-async def solve_instance(instance: str):
+async def solve_instance(instance: str) -> Union[Table, HTTPException]:
     """
     Это метод решает логические функции. Возращает таблицу истинности
     """
@@ -46,11 +52,7 @@ async def solve_instance(instance: str):
         truth_table.solve_instance(instance)
     except Exception as e:
         return HTTPException(status_code=400, detail=str(e))
-    return JSONResponse({
-        "truth_table": truth_table.get_dict(),
-        "solution": truth_table.get_solution(),
-        "status_code": 200
-    })
+    return Table(truth_table=truth_table.get_dict(), solution=truth_table.get_solution(), status_code=200)
 
 
 if __name__ == "__main__":

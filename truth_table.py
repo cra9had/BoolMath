@@ -40,7 +40,7 @@ class TruthTable:
             number = number[:-length_delta]
         return number
 
-    def get_dict(self):
+    def get_dict(self) -> dict:
         output_dict = {}
         for i, header in enumerate(self.headers):
             try:
@@ -53,7 +53,7 @@ class TruthTable:
 
         return output_dict
 
-    def get_solution(self):
+    def get_solution(self) -> list:
         solutions = []
         for j, solution in enumerate(self.solution):
             for i, sol in enumerate(self.solution):
