@@ -73,33 +73,33 @@ class TruthTable:
 
         return str_table
 
-    def get_values_by_headers(self, headers: list):
+    def get_values_by_headers(self, headers: list) -> tuple:
         try:
             return self.table[self.headers.index(headers[0])], self.table[self.headers.index(headers[1])]
         except ValueError:
             raise VariableDoesNotExist(value=headers)
 
-    def make_implication(self, headers: list):
+    def make_implication(self, headers: list) -> None:
         self.current_action += 1
         new_values = ["1" if not (a == "1" and b == "0") else "0" for a, b in zip(*self.get_values_by_headers(headers))]
         self.add_column(str(self.current_action), new_values)
 
-    def make_disjunction(self, headers: list):
+    def make_disjunction(self, headers: list) -> None:
         self.current_action += 1
         new_values = ["1" if a == "1" or b == "1" else "0" for a, b in zip(*self.get_values_by_headers(headers))]
         self.add_column(str(self.current_action), new_values)
 
-    def make_conjunction(self, headers: list):
+    def make_conjunction(self, headers: list) -> None:
         self.current_action += 1
         new_values = ["1" if a == "1" and b == "1" else "0" for a, b in zip(*self.get_values_by_headers(headers))]
         self.add_column(str(self.current_action), new_values)
 
-    def make_equation(self, headers: list):
+    def make_equation(self, headers: list) -> None:
         self.current_action += 1
         new_values = ["1" if a == b else "0" for a, b in zip(*self.get_values_by_headers(headers))]
         self.add_column(str(self.current_action), new_values)
 
-    def make_inversion(self, header: str):
+    def make_inversion(self, header: str) -> None:
         self.current_action += 1
         try:
             values = self.table[self.headers.index(header)]
@@ -121,7 +121,8 @@ class TruthTable:
 
         return sorted(list(headers))
 
-    def solve_instance(self, instance: str):
+    #TODO: разбить на функции
+    def solve_instance(self, instance: str) -> None:
         instance = instance.replace(" ", "")
         inversion = re.search(r"INV\(.[^INV()]?\)", instance)
         conjunction = re.search(r".?/\\.?", instance)
@@ -177,11 +178,3 @@ class TruthTable:
             for j in range(len(number)):
                 self.table[j].append(number[j])
 
-
-if __name__ == "__main__":
-    while True:
-        table = TruthTable()
-        instance = input(">>> ")
-        table.set_start_columns(instance)
-        table.solve_instance(instance)
-        print(table)

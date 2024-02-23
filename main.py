@@ -54,11 +54,11 @@ async def solve_instance(instance: str) -> Table:
     try:
         truth_table.set_start_columns(instance)
     except VariablesAreNotProvided as e:
-        raise  HTTPException(status_code=400, detail=e.msg)
+        raise HTTPException(status_code=400, detail=e.msg)
     try:
         truth_table.solve_instance(instance)
     except Exception as e:
-        raise  HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e))
     return Table(truth_table=truth_table.get_dict(), solution=truth_table.get_solution(), status_code=200)
 
 
