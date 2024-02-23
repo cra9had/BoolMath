@@ -6,16 +6,14 @@ from truth_table import TruthTable, VariablesAreNotProvided
 from pydantic import BaseModel
 import uvicorn
 
-
 description = """
 API калькулятора таблицы истинности.
 """
 
-
 app = FastAPI(
     title="BestCalculatorEver",
     description=description,
-    version="0.0.1",
+    version="1.0.1",
     contact={
         "name": "Khaiam Aliev",
         "email": "khaiam.aliev@mail.ru"
@@ -36,6 +34,15 @@ class Table(BaseModel):
     truth_table: dict
     solution: list
     status_code: int
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {"truth_table": {"B": [0, 0, 1, 1], "C": [0, 1, 0, 1], "1": [0, 0, 0, 1]}, "solution": ["B/\\C"],
+                 "status_code": 200}
+            ]
+        }
+    }
 
 
 @app.post("/api/solve_instance", status_code=200)
