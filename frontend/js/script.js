@@ -1,93 +1,124 @@
+let startPage = document.querySelector(".startPage")
+let contentPage = document.querySelector(".contentPage")
+
+
+
+setTimeout(() => {
+  startPage.style.display = "none"
+  contentPage.style.display = "block"
+}, 1000);
+
 let button = document.getElementById("SolveButton")
 let input = document.getElementById("InstanceInput")
 
 
-function SetSolution(solution){
-    let div = document.getElementsByClassName("solution")[0]
-    div.innerHTML = "<span>Решение:</span><br>"
-    for (let i = 0; i < solution.length; i++){
-        div.innerHTML += `<li class="list-group-item">${i+1}. ${solution[i]}</li>`
-    }
+///////////
+let ClearButton = document.getElementById("ClearButton")
+ClearButton.onclick = () => {
+  input.value = ''
+  document.querySelector('.answer').style.display = 'none'
 }
 
 
-function SetTable (table){
-    let keys = Object.keys(table)
+function SetSolution(solution) {
+  let div = document.getElementsByClassName("solution")[0]
+  div.innerHTML = "<span class='resheny'>Решение:</span>"
+  for (let i = 0; i < solution.length; i++) {
+    div.innerHTML += `<li class="list-group-item">${i + 1}. ${solution[i]}</li>`
+  }
+}
 
-    keys.sort(function (a, b){
-        if (isNaN(parseInt(a))){
-            if (isNaN(parseInt(b))){
-                if (a > b){
-                    return 1
-                }else {return -1}
-            }
-            return -1
-        }
-        else{
-            return 1
-        }
-    })
 
-    let thead = document.getElementById("headers")
-    thead.innerHTML = ''
-    for (const [key] of keys) {
+function SetTable(table) {
+  let keys = Object.keys(table)
 
-        thead.insertAdjacentHTML('beforeend', `<th scope="col">${key}</th>`)
-
+  keys.sort(function (a, b) {
+    if (isNaN(parseInt(a))) {
+      if (isNaN(parseInt(b))) {
+        if (a > b) {
+          return 1
+        } else { return -1 }
+      }
+      return -1
     }
-    let body = document.getElementById("body")
-    body.innerHTML = ""
-    let row = ""
-    for (let i = 0; i < table[keys[0]].length; i++) {
-        for (let j=0; j<keys.length; j++) {
-            let value = table[keys[j]]
-            row += `<td>${value[i]}</td>`
-        }
-        body.insertAdjacentHTML('beforeend', `<tr>${row}</tr>`)
-        row = ""
+    else {
+      return 1
     }
+  })
+
+  let thead = document.getElementById("headers")
+  thead.innerHTML = ''
+  for (const [key] of keys) {
+
+    thead.insertAdjacentHTML('beforeend', `<th scope="col">${key}</th>`)
+
+  }
+  let body = document.getElementById("body")
+  body.innerHTML = ""
+  let row = ""
+  for (let i = 0; i < table[keys[0]].length; i++) {
+    for (let j = 0; j < keys.length; j++) {
+      let value = table[keys[j]]
+      row += `<td>${value[i]}</td>`
+    }
+    body.insertAdjacentHTML('beforeend', `<tr>${row}</tr>`)
+    row = ""
+  }
 }
 
 
 window.addEventListener('load', function () {
-    let keyboard = document.getElementById('keyboard')
-    let buttons = ['/\\', '\\/', '->', '=', 'INV()', 'A', 'B', 'C', 'D'];
-    console.log(buttons)
-    for (let i = 0; i < buttons.length; i++){
-        const button_text = buttons[i]
-        const button = `<button class="keyboard-button" id="${button_text}">${button_text}</button>`
-        keyboard.insertAdjacentHTML('beforeend', button)
-        document.getElementById(button_text).onclick = function () {
-            const length = input.selectionStart
+  let keyboard = document.getElementById('keyboard')
+  let buttons = ['/\\', 'A', '\\/', '->', '=', 'B', 'INV()', 'C', 'D'];
+  console.log(buttons)
+  for (let i = 0; i < buttons.length; i++) {
+    const button_text = buttons[i]
+    const isLetter = /^[A-Za-z]$/.test(button_text);
+    let buttonClass = isLetter ? 'abc' : button_text == 'INV()' ? 'inverse' : '';
 
-            input.setRangeText(button_text)
-            input.focus()
-            if (button_text !== "INV()") {
-                input.setSelectionRange( length + button_text.length,  length + button_text.length);
-            } else {
-                input.setSelectionRange( length + button_text.length - 1,  length + button_text.length - 1);
-            }
-        }
+
+    const button = `<button class="keyboard-button btn-kw ${buttonClass}" id="${button_text}">${button_text}</button>`
+
+    keyboard.insertAdjacentHTML('beforeend', button)
+    document.getElementById(button_text).onclick = function () {
+      const length = input.selectionStart
+
+      input.setRangeText(button_text)
+      input.focus()
+      if (button_text !== "INV()") {
+        input.setSelectionRange(length + button_text.length, length + button_text.length);
+      } else {
+        input.setSelectionRange(length + button_text.length - 1, length + button_text.length - 1);
+      }
     }
+  }
 })
 
-button.onclick = async function onclick () {
+button.onclick = async function onclick() {
+  button.disabled = true
+  button.innerHTML = '<div class="spinner-border"></div>'
+
+  setTimeout(async () => {
+    button.disabled = false
+    button.innerHTML = 'Решить'
+
     let params = "?instance=" + input.value
     let request = await fetch("https://truthcalc.ru/api/solve_instance" + params, {
-        method: "POST",
-        headers: {
-            "Accept": "application/json"
-        }
+      method: "POST",
+      headers: {
+        "Accept": "application/json"
+      }
     })
     let response = await request.json()
-    if (response["status_code"] === 200){
-
-        SetTable(response["truth_table"])
-        SetSolution(response["solution"])
+    if (response["status_code"] === 200) {
+      document.querySelector('.answer').style.display = 'block'
+      SetTable(response["truth_table"])
+      SetSolution(response["solution"])
     }
-    else{
-        alert(response["detail"])
+    else {
+      alert(response["detail"])
     }
+  }, 1000);
 }
 
 
@@ -107,41 +138,41 @@ function pop(event) {
   }
   create(x, y);
 }
-function createParticle(x, y, img) {
-  const image = 'static/images/atom.png'
-  const particle = document.createElement("particle");
-  document.body.appendChild(particle);
-  // just play a little bit with these values 🙂
-  const size = Math.floor(Math.random() * 28 + 4);
-  const destinationX = (Math.random() - 0.5) * 150;
-  const destinationY = (Math.random() - 0.5) * 150;
-  const rotation = Math.random() * 500;
-  const duration = Math.random() * 1000 + 1000;
-  const delay = Math.random() * 200;
-  particle.style.backgroundImage = `url(${image})`;
-  particle.style.width = particle.style.height = `${size}px`;
-  const animation = particle.animate(
-    [
-      {
-        transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(0deg)`,
-        opacity: 1
-      },
-      {
-        transform: `translate(-50%, -50%) translate(${x + destinationX}px, ${
-          y + destinationY
-        }px) rotate(${rotation}deg)`,
-        opacity: 0
-      }
-    ],
-    {
-      duration,
-      easing: "cubic-bezier(0, .9, .57, 1)",
-      delay
-    }
-  );
-  animation.onfinish = removeParticle;
-}
-function removeParticle(event) {
-  event.srcElement.effect.target.remove();
-}
-if (document.body.animate) document.body.addEventListener("click", pop);
+// function createParticle(x, y, img) {
+//   const image = 'static/images/atom.png'
+//   const particle = document.createElement("particle");
+//   document.body.appendChild(particle);
+//   // just play a little bit with these values 🙂
+//   const size = Math.floor(Math.random() * 28 + 4);
+//   const destinationX = (Math.random() - 0.5) * 150;
+//   const destinationY = (Math.random() - 0.5) * 150;
+//   const rotation = Math.random() * 500;
+//   const duration = Math.random() * 1000 + 1000;
+//   const delay = Math.random() * 200;
+//   particle.style.backgroundImage = `url(${image})`;
+//   particle.style.width = particle.style.height = `${size}px`;
+//   const animation = particle.animate(
+//     [
+//       {
+//         transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(0deg)`,
+//         opacity: 1
+//       },
+//       {
+//         transform: `translate(-50%, -50%) translate(${x + destinationX}px, ${
+//           y + destinationY
+//         }px) rotate(${rotation}deg)`,
+//         opacity: 0
+//       }
+//     ],
+//     {
+//       duration,
+//       easing: "cubic-bezier(0, .9, .57, 1)",
+//       delay
+//     }
+//   );
+//   animation.onfinish = removeParticle;
+// }
+// function removeParticle(event) {
+//   event.srcElement.effect.target.remove();
+// }
+// if (document.body.animate) document.body.addEventListener("click", pop);
